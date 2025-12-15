@@ -8,7 +8,7 @@ import logger from "./middleware/logger.js";
 const app = express();
 const port = process.env.PORT || 5000;
 const __dirname = path.resolve();
-console.log(__dirname);
+// console.log(__dirname);
 
 // static files
 app.use(express.static(path.join(__dirname, "public")));

@@ -1,23 +1,35 @@
-// const express = require('express');
-import express from 'express';
+import express from "express";
+import path from "path";
+import postRoutes from "./routes/post.js";
+import errorHandler from "./middleware/error.js";
+import notFound from "./middleware/notfound.js";
+import logger from "./middleware/logger.js";
 
 const app = express();
-// const path=require('path');
-import path from 'path';
-// const postRoutes=require('./routes/post');
-import postRoutes from './routes/post.js';
-import logger from './middlware/logger.js';
 const port = process.env.PORT || 5000;
+const __dirname = path.resolve();
+console.log(__dirname);
 
-// app.use(express.static(path.join(__dirname,'public')));
+// static files
+app.use(express.static(path.join(__dirname, "public")));
 
-//middleware
+// body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(logger);
-//routes
-app.use('/api/post',postRoutes);
 
-app.listen(port,(req,res)=>{
-    console.log(`server is running on ${port}`);
+// logger middleware
+app.use(logger);
+
+// routes
+app.use("/api/post", postRoutes);
+
+// 404 middleware
+app.use(notFound);
+
+// error handling middleware
+app.use(errorHandler);
+
+// start server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
